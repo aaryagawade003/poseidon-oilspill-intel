@@ -1,17 +1,64 @@
 import React, { useState } from 'react';
+import { Waves, Clock, AlertTriangle, ChevronDown, ChevronUp, Ship, MapPinned, FileCheck2 } from 'lucide-react';
 import { Incident, VesselCandidate } from '../types';
-import { Waves, Clock, AlertTriangle, ChevronDown, ChevronUp, Ship } from 'lucide-react';
 
 interface SidebarProps { incident: Incident; selectedVessel: VesselCandidate | null; onSelectVessel: (vessel: VesselCandidate) => void; onViewEvidence: () => void; }
-const riskBadgeClass = (risk: string) => risk === 'High' ? 'bg-red-500/20 text-red-300 border border-red-500/30' : risk === 'Medium' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : risk === 'Cleared' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : risk === 'Dark Contact' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' : 'bg-slate-500/20 text-slate-300 border border-slate-500/30';
-const riskDotClass = (risk: string) => risk === 'High' ? 'bg-red-400' : risk === 'Medium' ? 'bg-amber-400' : risk === 'Cleared' ? 'bg-emerald-400' : risk === 'Dark Contact' ? 'bg-purple-400' : 'bg-slate-400';
+
+const riskBadgeClass = (risk: string) => {
+  if (risk === 'High') return 'gdacs-alert-red border';
+  if (risk === 'Medium') return 'gdacs-alert-orange border';
+  if (risk === 'Cleared') return 'gdacs-alert-green border';
+  if (risk === 'Dark Contact') return 'bg-purple-50 text-purple-700 border-purple-200 border';
+  return 'bg-slate-50 text-slate-600 border-slate-200 border';
+};
+const riskDotClass = (risk: string) => risk === 'High' ? 'bg-red-600' : risk === 'Medium' ? 'bg-orange-500' : risk === 'Cleared' ? 'bg-green-500' : risk === 'Dark Contact' ? 'bg-purple-500' : 'bg-slate-400';
 
 export const Sidebar: React.FC<SidebarProps> = ({ incident, selectedVessel, onSelectVessel, onViewEvidence }) => {
   const [expanded, setExpanded] = useState(true);
-  return <aside className="sidebar-panel w-72 flex-shrink-0 flex flex-col overflow-hidden sidebar-scroll">
-    <div className="p-4 border-b border-slate-700"><div className="flex items-center justify-between mb-2"><span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">Active Incident</span><span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-red-500/20 text-red-400 border border-red-500/30">● HIGH ALERT</span></div><div className="font-ibm font-bold text-white text-xl">{incident.id}</div><div className="text-slate-300 text-sm mt-0.5">{incident.locationName}</div><div className="text-slate-500 text-xs font-mono mt-1">{incident.satelliteAcquisitionTime}</div></div>
-    <div className="p-4 border-b border-slate-700 space-y-3"><div className="text-[10px] font-mono text-slate-400 uppercase tracking-widest mb-3">Spill Summary</div><div className="flex items-center justify-between"><div className="flex items-center space-x-2 text-slate-400 text-xs"><Waves className="w-3.5 h-3.5 text-ocean-blue"/><span>Spill Area</span></div><div className="font-ibm font-bold text-white text-sm">{incident.areaKm2} km²</div></div><div className="flex items-center justify-between"><div className="flex items-center space-x-2 text-slate-400 text-xs"><Clock className="w-3.5 h-3.5 text-amber-400"/><span>Release Window</span></div><div className="font-mono font-semibold text-amber-300 text-xs">{incident.releaseTimeWindow}</div></div><div className="flex items-center justify-between"><div className="flex items-center space-x-2 text-slate-400 text-xs"><AlertTriangle className="w-3.5 h-3.5 text-red-400"/><span>AI Confidence</span></div><div className="font-mono font-semibold text-emerald-300 text-xs">{(incident.confidence*100).toFixed(1)}%</div></div><div className="w-full h-1.5 bg-slate-700 rounded-full overflow-hidden"><div className="h-full bg-gradient-to-r from-ocean-blue to-emerald-400 rounded-full" style={{width:`${incident.confidence*100}%`}}/></div></div>
-    <div className="flex-1 overflow-y-auto sidebar-scroll"><button onClick={()=>setExpanded(!expanded)} className="w-full flex items-center justify-between p-4 border-b border-slate-700 hover:bg-slate-700/30"><div className="flex items-center space-x-2"><Ship className="w-4 h-4 text-ocean-blue"/><span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">AIS Candidates</span><span className="w-4 h-4 rounded-full bg-red-500/20 text-red-400 text-[10px] flex items-center justify-center font-bold border border-red-500/30">{incident.vessels.filter(v=>v.riskCategory!=='Cleared').length}</span></div>{expanded?<ChevronUp className="w-4 h-4 text-slate-500"/>:<ChevronDown className="w-4 h-4 text-slate-500"/>}</button>{expanded&&<div className="divide-y divide-slate-700/50">{incident.vessels.map(v=>{const selected=selectedVessel?.id===v.id;return <button key={v.id} onClick={()=>onSelectVessel(v)} className={`w-full text-left p-4 transition-all hover:bg-slate-700/40 ${selected?'bg-ocean-blue/10 border-l-2 border-ocean-blue':'border-l-2 border-transparent'}`}><div className="flex items-start justify-between gap-2 mb-2"><div className="flex items-center space-x-2"><div className={`w-2 h-2 rounded-full flex-shrink-0 ${riskDotClass(v.riskCategory)}`}/><span className="font-ibm font-semibold text-white text-sm leading-tight">{v.name}</span></div><span className={`text-[10px] px-1.5 py-0.5 rounded font-mono font-bold ${riskBadgeClass(v.riskCategory)}`}>{v.attributionScore}</span></div><div className="ml-4 flex items-center justify-between"><span className="text-slate-400 text-xs">{v.type.split(' ').slice(0,2).join(' ')}</span><span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${riskBadgeClass(v.riskCategory)}`}>{v.riskCategory}</span></div><div className="ml-4 mt-2 w-full h-1 bg-slate-700 rounded-full overflow-hidden"><div className="h-full rounded-full bg-ocean-blue" style={{width:`${v.attributionScore}%`}}/></div></button>})}</div>}</div>
-    <div className="p-4 border-t border-slate-700 space-y-2"><button onClick={onViewEvidence} className="w-full flex items-center justify-center space-x-2 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-ibm font-semibold rounded-lg"><AlertTriangle className="w-4 h-4"/><span>Export Evidence Pack</span></button><div className="text-[10px] font-mono text-slate-600 text-center">SIH 2026 · PS26143 · POSEIDON</div></div>
-  </aside>;
+  const candidates = incident.vessels.filter(v => v.riskCategory !== 'Cleared');
+  return (
+    <aside className="gdacs-sidebar w-72 flex-shrink-0 flex flex-col overflow-hidden sidebar-scroll">
+      <div className="px-4 py-3 border-b border-slate-200 bg-slate-50">
+        <div className="flex items-center justify-between gap-2">
+          <span className="gdacs-section-title">Active incident</span>
+          <span className="gdacs-alert-orange px-2 py-0.5 rounded text-[9px] font-bold border">ORANGE / INVESTIGATION</span>
+        </div>
+        <div className="text-xl font-extrabold text-slate-800 mt-2">{incident.id}</div>
+        <div className="text-sm font-semibold text-slate-600 mt-0.5">{incident.locationName}</div>
+        <div className="text-[10px] font-mono text-slate-400 mt-1">ACQUIRED · {incident.satelliteAcquisitionTime}</div>
+      </div>
+
+      <div className="p-4 border-b border-slate-200 space-y-3">
+        <div className="gdacs-section-title">Event summary</div>
+        <div className="gdacs-kpi p-3"><div className="flex items-center justify-between"><span className="gdacs-caption flex items-center gap-1.5"><Waves className="w-3.5 h-3.5 text-cyan-700"/> Slick extent</span><strong className="text-slate-800">{incident.areaKm2} km²</strong></div></div>
+        <div className="flex items-center justify-between"><span className="gdacs-caption flex items-center gap-1.5"><Clock className="w-3.5 h-3.5 text-orange-500"/> Release window</span><span className="gdacs-data text-[10px] font-semibold">{incident.releaseTimeWindow}</span></div>
+        <div className="flex items-center justify-between"><span className="gdacs-caption flex items-center gap-1.5"><AlertTriangle className="w-3.5 h-3.5 text-red-600"/> Detection confidence</span><span className="gdacs-data text-[10px] font-semibold text-green-700">{(incident.confidence*100).toFixed(1)}%</span></div>
+        <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div className="h-full bg-gradient-to-r from-[#0b829e] to-[#4caf50]" style={{ width:`${incident.confidence*100}%` }}/></div>
+      </div>
+
+      <div className="px-4 py-3 border-b border-slate-200 bg-white flex items-center justify-between">
+        <div className="flex items-center gap-2"><Ship className="w-4 h-4 text-cyan-700"/><span className="gdacs-section-title">AIS candidate funnel</span><span className="gdacs-alert-red w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold border">{candidates.length}</span></div>
+        <button onClick={() => setExpanded(!expanded)} aria-label="Toggle AIS candidates">{expanded ? <ChevronUp className="w-4 h-4 text-slate-400"/> : <ChevronDown className="w-4 h-4 text-slate-400"/>}</button>
+      </div>
+
+      {expanded && <div className="flex-1 overflow-y-auto sidebar-scroll divide-y divide-slate-100">
+        {incident.vessels.map(v => {
+          const selected = selectedVessel?.id === v.id;
+          return <button key={v.id} onClick={() => onSelectVessel(v)} className={`w-full text-left p-3.5 transition-all border-l-4 ${selected ? 'bg-cyan-50 border-l-cyan-600' : 'bg-white border-l-transparent hover:bg-slate-50'}`}>
+            <div className="flex items-start justify-between gap-2">
+              <div className="flex items-center gap-2 min-w-0"><div className={`w-2 h-2 rounded-full shrink-0 ${riskDotClass(v.riskCategory)}`}/><span className="font-bold text-slate-700 text-sm truncate">{v.name}</span></div>
+              <span className={`text-[10px] px-1.5 py-0.5 rounded font-mono font-bold ${riskBadgeClass(v.riskCategory)}`}>{v.attributionScore}</span>
+            </div>
+            <div className="ml-4 mt-1.5 flex items-center justify-between"><span className="text-[10px] text-slate-500">{v.type.split(' ').slice(0,2).join(' ')}</span><span className={`text-[9px] px-1.5 py-0.5 rounded font-bold ${riskBadgeClass(v.riskCategory)}`}>{v.riskCategory}</span></div>
+            <div className="ml-4 mt-2 h-1 bg-slate-100 rounded-full overflow-hidden"><div className="h-full bg-[#0b829e] rounded-full" style={{ width:`${v.attributionScore}%` }}/></div>
+          </button>;
+        })}
+      </div>}
+
+      <div className="p-3 border-t border-slate-200 bg-slate-50 space-y-2">
+        <button onClick={onViewEvidence} className="w-full flex items-center justify-center gap-2 py-2.5 bg-[#d93025] hover:bg-[#bd261e] text-white text-xs font-bold rounded-md shadow-sm"><FileCheck2 className="w-4 h-4"/> Export investigation dossier</button>
+        <div className="flex items-center justify-center gap-1.5 text-[9px] font-mono text-slate-400"><MapPinned className="w-3 h-3"/> HUMAN-IN-THE-LOOP · SIH26143</div>
+      </div>
+    </aside>
+  );
 };

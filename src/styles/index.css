@@ -1,100 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --gdacs-teal-900: #075985;
+  --gdacs-teal-800: #0b6f8f;
+  --gdacs-teal-700: #087f9f;
+  --gdacs-teal-600: #1398b5;
+  --gdacs-blue: #1769aa;
+  --gdacs-blue-soft: #e8f3f8;
+  --gdacs-bg: #f3f7f9;
+  --gdacs-panel: #ffffff;
+  --gdacs-border: #d8e2e8;
+  --gdacs-text: #19324a;
+  --gdacs-muted: #60778a;
+  --gdacs-green: #4caf50;
+  --gdacs-yellow: #f4b400;
+  --gdacs-orange: #ef8b22;
+  --gdacs-red: #d93025;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  background: radial-gradient(circle at top center, #0b132b 0%, #060a14 70%);
-  background-attachment: fixed;
-  color: #f1f5f9;
-  font-family: 'Inter', sans-serif;
+  background: var(--gdacs-bg);
+  color: var(--gdacs-text);
+  font-family: 'Inter', system-ui, sans-serif;
   min-height: 100vh;
+  overflow: hidden;
 }
 
-/* Custom Scrollbars */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: #0b132b;
-}
-::-webkit-scrollbar-thumb {
-  background: #1c2541;
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #3b82f6;
+button, input, select { font: inherit; }
+
+.font-ibm { font-family: 'Inter', system-ui, sans-serif; }
+.font-mono, .font-data { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+
+.gdacs-app {
+  background:
+    linear-gradient(180deg, #f8fbfc 0%, #eef4f7 100%);
+  color: var(--gdacs-text);
 }
 
-/* Glassmorphism */
-.glass-panel {
-  background: rgba(11, 19, 43, 0.5);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
-}
-.glass-panel-heavy {
-  background: rgba(6, 10, 20, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(0, 240, 255, 0.15);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+.gdacs-header {
+  background: linear-gradient(180deg, #0b7697 0%, #087e9d 55%, #0b6f8f 100%);
+  color: white;
+  box-shadow: 0 2px 10px rgba(24, 61, 78, 0.18);
 }
 
+.gdacs-nav-tab {
+  color: rgba(255,255,255,.82);
+  border-bottom: 3px solid transparent;
+  transition: all .16s ease;
+}
+.gdacs-nav-tab:hover { background: rgba(255,255,255,.08); color: #fff; }
+.gdacs-nav-tab-active { background: rgba(255,255,255,.14); color: #fff; border-bottom-color: #fff; }
 
-/* Tactical glowing animations */
-.glow-cyan {
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.35);
+.gdacs-sidebar {
+  background: #fff;
+  border-right: 1px solid var(--gdacs-border);
+  box-shadow: 2px 0 8px rgba(26, 55, 72, .05);
 }
-.glow-danger {
-  box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+.gdacs-sidebar-item {
+  color: #536d7f;
+  border-left: 3px solid transparent;
+  transition: .15s ease;
 }
-.glow-emerald {
-  box-shadow: 0 0 15px rgba(16, 185, 129, 0.35);
+.gdacs-sidebar-item:hover { background: #eef6f9; color: #175d78; }
+.gdacs-sidebar-item-active { background: #e5f3f7; color: #075985; border-left-color: #0b8aa8; font-weight: 700; }
+
+.gdacs-panel {
+  background: #fff;
+  border: 1px solid var(--gdacs-border);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(28, 60, 78, .06);
 }
-.border-glow-cyan {
-  border-color: #00f0ff;
-  box-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+.gdacs-panel-header {
+  background: linear-gradient(180deg, #ffffff 0%, #f5f9fb 100%);
+  border-bottom: 1px solid var(--gdacs-border);
+}
+.gdacs-section-title {
+  color: #26485e;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.gdacs-caption { color: #6c8190; font-size: .72rem; }
+.gdacs-data { font-family: 'IBM Plex Mono', monospace; color: #274b61; }
+
+.gdacs-alert-green { background:#e8f5e9; color:#2e7d32; border-color:#b9dfbd; }
+.gdacs-alert-yellow { background:#fff8df; color:#9a7000; border-color:#f2dc92; }
+.gdacs-alert-orange { background:#fff0df; color:#b85b00; border-color:#f3bf85; }
+.gdacs-alert-red { background:#fdeceb; color:#b3261e; border-color:#efb0aa; }
+.gdacs-alert-blue { background:#e8f3f8; color:#075985; border-color:#b8d9e6; }
+
+.gdacs-kpi {
+  background:#fff;
+  border:1px solid #d8e2e8;
+  border-radius:7px;
+  padding:14px 16px;
+  box-shadow:0 2px 7px rgba(28,60,78,.05);
+}
+.gdacs-kpi-label { color:#718594; font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+.gdacs-kpi-value { color:#173c54; font-size:1.35rem; line-height:1.2; font-weight:800; margin-top:5px; }
+.gdacs-kpi-meta { color:#78909e; font-size:10px; margin-top:3px; }
+
+.gdacs-map-frame {
+  border: 1px solid #cbdbe3;
+  border-radius: 7px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.7), 0 2px 8px rgba(30,70,90,.08);
 }
 
-/* Radar scanning grid effect */
-.radar-grid {
-  background-image: 
-    linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
-  background-size: 24px 24px;
+.gdacs-news-ribbon {
+  background:#eef6f9;
+  border:1px solid #c9e0e8;
+  color:#276179;
 }
 
-/* Leaflet dark theme customization */
-.leaflet-container {
-  background: #060a14 !important;
-  font-family: 'Inter', sans-serif;
+.gdacs-hero {
+  background: linear-gradient(135deg, #0b6f8f 0%, #0b829e 48%, #1769aa 100%);
+  color:#fff;
+  border-radius:9px;
+  box-shadow:0 6px 18px rgba(16,86,113,.18);
 }
 
-.leaflet-bar a {
-  background-color: #0b132b !important;
-  color: #00f0ff !important;
-  border-color: #1c2541 !important;
-}
-.leaflet-bar a:hover {
-  background-color: #1c2541 !important;
-  color: #ffffff !important;
+.gdacs-technical {
+  background:#0b1f2a;
+  color:#e7f5f8;
+  border:1px solid #174458;
 }
 
-.leaflet-popup-content-wrapper {
-  background: #0b132b !important;
-  color: #f1f5f9 !important;
-  border: 1px solid #1c2541 !important;
-  border-radius: 8px !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.8) !important;
-}
-.leaflet-popup-tip {
-  background: #0b132b !important;
-}
+/* Keep analytical map surfaces dark while the command UI follows the GDACS visual language. */
+.leaflet-container { background:#dcecf1 !important; font-family:'Inter', sans-serif; }
+.leaflet-bar a { background:#fff !important; color:#1769aa !important; border-color:#c9d8df !important; }
+.leaflet-bar a:hover { background:#eef6f9 !important; color:#075985 !important; }
+.leaflet-control-attribution { background:rgba(255,255,255,.86) !important; color:#647b89 !important; font-size:9px !important; }
+.leaflet-control-attribution a { color:#1769aa !important; }
+.leaflet-popup-content-wrapper { background:#fff !important; color:#173c54 !important; border:1px solid #cbdbe3 !important; border-radius:7px !important; box-shadow:0 8px 22px rgba(30,70,90,.18) !important; }
+.leaflet-popup-tip { background:#fff !important; }
+
+/* Existing utility surfaces: keep dark forensic cards intentional, but make page-level light utilities legible. */
+.gdacs-app .text-slate-900 { color:#173c54 !important; }
+.gdacs-app .text-slate-800 { color:#26485e !important; }
+.gdacs-app .text-slate-700 { color:#405f72 !important; }
+.gdacs-app .text-slate-600 { color:#60778a !important; }
+.gdacs-app .text-slate-500 { color:#718594 !important; }
+.gdacs-app .text-slate-400 { color:#8295a1 !important; }
+.gdacs-app .bg-slate-100 { background:#f3f7f9 !important; }
+.gdacs-app .bg-slate-50 { background:#f8fbfc !important; }
+
+::-webkit-scrollbar { width:7px; height:7px; }
+::-webkit-scrollbar-track { background:#edf3f6; }
+::-webkit-scrollbar-thumb { background:#b8cbd4; border-radius:999px; }
+::-webkit-scrollbar-thumb:hover { background:#7fa6b7; }
+
+@keyframes gdacsPulse { 0%,100%{opacity:1} 50%{opacity:.45} }
+.gdacs-live-dot { animation:gdacsPulse 1.6s ease-in-out infinite; }
+
+@keyframes radarPulse { 0%{transform:scale(.8);opacity:.7} 70%{transform:scale(1.55);opacity:.18} 100%{transform:scale(1.9);opacity:0} }
+.animate-radar-pulse { animation:radarPulse 2.5s ease-out infinite; }
+
+.radar-grid { background-image:linear-gradient(rgba(11,126,157,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(11,126,157,.06) 1px,transparent 1px); background-size:24px 24px; }
+
+.marine-ship-marker, .marine-vector-marker { background:transparent !important; border:none !important; }
+.sidebar-scroll { scrollbar-width:thin; }
+.timeline-slider { accent-color:#0b829e; }
