@@ -1,66 +1,58 @@
 import React from 'react';
-import { Shield, Satellite, Radio, Crosshair } from 'lucide-react';
+import { Shield, Satellite, Radio, Crosshair, Waves, Ship, Map, AlertTriangle, ArrowRight } from 'lucide-react';
 
-interface LandingProps {
-  onLaunch: () => void;
-}
+interface LandingProps { onLaunch: () => void; }
 
 export const Landing: React.FC<LandingProps> = ({ onLaunch }) => {
   return (
-    <div className="min-h-screen bg-transparent flex flex-col items-center justify-center relative overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 -left-1/4 w-[800px] h-[800px] bg-cyan-600/10 rounded-full blur-[120px] animate-pulse-subtle"></div>
-        <div className="absolute bottom-1/4 -right-1/4 w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-[150px] animate-pulse-subtle" style={{ animationDelay: '1s' }}></div>
-      </div>
+    <div className="min-h-screen gdacs-app flex flex-col overflow-auto">
+      <header className="gdacs-header">
+        <div className="max-w-[1500px] mx-auto w-full px-5 lg:px-10 py-2 flex items-center justify-between text-[10px]">
+          <div className="flex items-center gap-3"><span className="font-bold tracking-[.2em]">POSEIDON</span><span className="text-white/65">Global Marine Spill Awareness & Forensic Coordination</span></div>
+          <span className="font-mono text-white/70">SIH 2026 · SIH26143</span>
+        </div>
+        <div className="border-t border-white/15 bg-black/5">
+          <div className="max-w-[1500px] mx-auto px-5 lg:px-10 flex gap-0"><span className="px-4 py-2 text-xs font-semibold border-b-2 border-white">HOME</span><span className="px-4 py-2 text-xs text-white/75">INCIDENTS</span><span className="px-4 py-2 text-xs text-white/75">MAPS & SATELLITE</span><span className="px-4 py-2 text-xs text-white/75">VESSEL INTELLIGENCE</span><span className="px-4 py-2 text-xs text-white/75">FORECASTS</span></div>
+        </div>
+      </header>
 
-      <div className="z-10 text-center max-w-4xl px-6 mt-10">
-        <div className="flex justify-center mb-8">
-          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-600 via-cyan-500 to-emerald-500 p-0.5 glow-cyan shadow-2xl hover:scale-105 transition-transform duration-500">
-            <div className="w-full h-full bg-navy-950 rounded-[14px] flex items-center justify-center">
-              <Shield className="w-10 h-10 text-cyber-cyan" />
+      <main className="flex-1 max-w-[1500px] mx-auto w-full px-5 lg:px-10 py-7">
+        <div className="gdacs-news-ribbon rounded-md px-4 py-2 flex items-center gap-3 text-xs mb-5"><span className="font-bold uppercase tracking-wider">LATEST SYSTEM</span><span>Multi-source marine incident coordination · Sentinel-1 · Ocean forcing · AIS · Counterfactual attribution</span></div>
+
+        <section className="gdacs-hero p-7 lg:p-10 relative overflow-hidden">
+          <div className="absolute inset-0 opacity-15 radar-grid"/>
+          <div className="relative grid lg:grid-cols-[1.35fr_.65fr] gap-10 items-center">
+            <div>
+              <div className="flex items-center gap-2 text-[10px] font-mono text-cyan-50 mb-4"><span className="gdacs-live-dot w-2 h-2 rounded-full bg-emerald-300"/> OPERATIONAL MARITIME INTELLIGENCE PLATFORM</div>
+              <h1 className="text-4xl lg:text-6xl font-extrabold tracking-tight leading-[1.03]">POSEIDON</h1>
+              <p className="mt-4 text-base lg:text-lg text-white/85 max-w-2xl leading-7">A decision-support system for detecting marine oil slicks, reconstructing their probable origin, forecasting drift and producing explainable AIS-based vessel correlations.</p>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <button onClick={onLaunch} className="group inline-flex items-center gap-3 px-5 py-3 rounded-md bg-white text-[#075985] font-bold text-sm shadow-lg hover:bg-cyan-50 transition"><Crosshair className="w-4 h-4"/> OPEN INVESTIGATION CONSOLE <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition"/></button>
+                <div className="px-4 py-3 rounded-md border border-white/20 bg-white/10 text-xs text-white/85 flex items-center gap-2"><AlertTriangle className="w-4 h-4 text-amber-200"/> Human-in-the-loop evidence review</div>
+              </div>
+            </div>
+            <div className="hidden lg:block rounded-lg bg-[#082c3b]/65 border border-white/20 p-5 backdrop-blur-sm">
+              <div className="text-[10px] uppercase tracking-widest text-white/60 font-bold">Mission chain</div>
+              <div className="mt-4 space-y-2">{[['01','DETECT','SAR anomaly'],['02','CHARACTERISE','slick geometry'],['03','HINDCAST','origin corridor'],['04','FILTER','AIS traffic'],['05','REPLAY','counterfactual release'],['06','DOSSIER','evidence trail']].map(([n,t,d])=><div key={n} className="flex items-center gap-3 py-2 border-b border-white/10 last:border-0"><span className="text-[9px] font-mono text-cyan-200 w-5">{n}</span><span className="text-[10px] font-bold w-24">{t}</span><span className="text-[10px] text-white/65">{d}</span></div>)}</div>
             </div>
           </div>
-        </div>
+        </section>
 
-        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent font-sans drop-shadow-lg">
-          POSEIDON
-        </h1>
-        
-        <p className="text-lg md:text-xl text-slate-400 mb-12 max-w-2xl mx-auto font-light leading-relaxed">
-          Geospatial Intelligence for Marine Oil Spill Detection, Lagrangian Drift Modeling, & Forensic AIS Attribution.
-        </p>
+        <section className="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          {[
+            [Satellite,'Satellite Intelligence','Sentinel-1 SAR features, slick segmentation, look-alike rejection','#0b829e'],
+            [Waves,'Ocean Dynamics','Backward particle hindcast and forward uncertainty envelopes','#1769aa'],
+            [Ship,'Vessel Intelligence','AIS funnel, behavioural anomalies and candidate scoring','#ef8b22'],
+            [Map,'Impact Coordination','Forecast shoreline risk, evidence layers and response zones','#4caf50'],
+          ].map(([Icon,title,desc,border])=><div key={title as string} className="gdacs-panel p-5 border-t-4" style={{borderTopColor:border as string}}><Icon className="w-7 h-7 text-slate-600 mb-4"/><h3 className="text-sm font-extrabold text-slate-800">{title as string}</h3><p className="text-xs text-slate-500 leading-5 mt-2">{desc as string}</p></div>)}
+        </section>
 
-        <button 
-          onClick={onLaunch}
-          className="group relative inline-flex items-center justify-center px-10 py-4 font-bold text-white transition-all duration-300 bg-blue-600/90 font-mono rounded-xl hover:bg-blue-500 glow-cyan hover:scale-105 border border-blue-400/50"
-        >
-          <span className="mr-3 tracking-widest text-sm">LAUNCH DSS PLATFORM</span>
-          <Crosshair className="w-5 h-5 group-hover:rotate-90 transition-transform duration-500" />
-        </button>
-      </div>
-
-      <div className="z-10 mt-32 mb-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl px-6 w-full">
-        <div className="glass-panel p-8 rounded-2xl text-left border-t-2 border-t-cyan-500 hover:-translate-y-2 transition-transform duration-300">
-          <Satellite className="w-8 h-8 text-cyan-400 mb-5" />
-          <h3 className="text-lg font-bold text-slate-100 mb-3 font-mono">SAR Intelligence</h3>
-          <p className="text-sm text-slate-400 leading-relaxed">Automated U-Net++ slick detection pipeline utilizing Sentinel-1 dual-polarization imagery.</p>
-        </div>
-        <div className="glass-panel p-8 rounded-2xl text-left border-t-2 border-t-amber-500 hover:-translate-y-2 transition-transform duration-300">
-          <Radio className="w-8 h-8 text-amber-400 mb-5" />
-          <h3 className="text-lg font-bold text-slate-100 mb-3 font-mono">Lagrangian Drift</h3>
-          <p className="text-sm text-slate-400 leading-relaxed">Backward hindcasting and forward probabilistic forecasting of ocean pollutants via OpenDrift.</p>
-        </div>
-        <div className="glass-panel p-8 rounded-2xl text-left border-t-2 border-t-red-500 hover:-translate-y-2 transition-transform duration-300">
-          <Shield className="w-8 h-8 text-red-400 mb-5" />
-          <h3 className="text-lg font-bold text-slate-100 mb-3 font-mono">Vessel Attribution</h3>
-          <p className="text-sm text-slate-400 leading-relaxed">Bayesian correlation engine matching dark fleets and historical AIS traffic against drift geometries.</p>
-        </div>
-      </div>
-      
-      <div className="absolute bottom-6 text-xs text-slate-600 font-mono">
-        SIH 2026 · Problem Statement SIH26143 · Indian Coast Guard & NTRO
-      </div>
+        <section className="mt-6 gdacs-panel p-5">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4"><div><div className="gdacs-section-title">Operational model</div><h2 className="text-lg font-extrabold text-slate-800 mt-1">From observation to explainable forensic hypothesis</h2></div><span className="gdacs-alert-blue px-2.5 py-1 rounded text-[10px] font-bold border">MULTI-SOURCE</span></div>
+          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2">{['SAR observation','Slick characterisation','Ocean / wind forcing','Probable origin','AIS correlation','Counterfactual validation'].map((x,i)=><div key={x} className="bg-slate-50 border border-slate-200 rounded-md p-3"><div className="text-[9px] font-mono text-cyan-700">0{i+1}</div><div className="text-xs font-bold text-slate-700 mt-2">{x}</div></div>)}</div>
+        </section>
+      </main>
+      <footer className="max-w-[1500px] mx-auto w-full px-5 lg:px-10 py-4 text-[9px] text-slate-400 font-mono flex justify-between"><span>POSEIDON · SIH26143 · INDIAN MARITIME INTELLIGENCE CONCEPT</span><span>Demo data must be independently verified before operational use.</span></footer>
     </div>
   );
 };
