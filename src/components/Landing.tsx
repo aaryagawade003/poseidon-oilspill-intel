@@ -1,14 +1,21 @@
 import React from 'react';
-import { Shield, Satellite, Radio, Crosshair, Waves, Ship, Map, AlertTriangle, ArrowRight } from 'lucide-react';
+import { Shield, Satellite, Crosshair, Waves, Ship, Map, AlertTriangle, ArrowRight, LucideIcon } from 'lucide-react';
 
 interface LandingProps { onLaunch: () => void; }
+
+const featureCards: Array<{ icon: LucideIcon; title: string; desc: string; border: string }> = [
+  { icon: Satellite, title: 'Satellite Intelligence', desc: 'Sentinel-1 SAR features, slick segmentation, look-alike rejection', border: '#0b829e' },
+  { icon: Waves, title: 'Ocean Dynamics', desc: 'Backward particle hindcast and forward uncertainty envelopes', border: '#1769aa' },
+  { icon: Ship, title: 'Vessel Intelligence', desc: 'AIS funnel, behavioural anomalies and candidate scoring', border: '#ef8b22' },
+  { icon: Map, title: 'Impact Coordination', desc: 'Forecast shoreline risk, evidence layers and response zones', border: '#4caf50' },
+];
 
 export const Landing: React.FC<LandingProps> = ({ onLaunch }) => {
   return (
     <div className="min-h-screen gdacs-app flex flex-col overflow-auto">
       <header className="gdacs-header">
         <div className="max-w-[1500px] mx-auto w-full px-5 lg:px-10 py-2 flex items-center justify-between text-[10px]">
-          <div className="flex items-center gap-3"><span className="font-bold tracking-[.2em]">POSEIDON</span><span className="text-white/65">Global Marine Spill Awareness & Forensic Coordination</span></div>
+          <div className="flex items-center gap-3"><span className="font-bold tracking-[0.2em]">POSEIDON</span><span className="text-white/65">Global Marine Spill Awareness & Forensic Coordination</span></div>
           <span className="font-mono text-white/70">SIH 2026 · SIH26143</span>
         </div>
         <div className="border-t border-white/15 bg-black/5">
@@ -39,12 +46,7 @@ export const Landing: React.FC<LandingProps> = ({ onLaunch }) => {
         </section>
 
         <section className="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-          {[
-            [Satellite,'Satellite Intelligence','Sentinel-1 SAR features, slick segmentation, look-alike rejection','#0b829e'],
-            [Waves,'Ocean Dynamics','Backward particle hindcast and forward uncertainty envelopes','#1769aa'],
-            [Ship,'Vessel Intelligence','AIS funnel, behavioural anomalies and candidate scoring','#ef8b22'],
-            [Map,'Impact Coordination','Forecast shoreline risk, evidence layers and response zones','#4caf50'],
-          ].map(([Icon,title,desc,border])=><div key={title as string} className="gdacs-panel p-5 border-t-4" style={{borderTopColor:border as string}}><Icon className="w-7 h-7 text-slate-600 mb-4"/><h3 className="text-sm font-extrabold text-slate-800">{title as string}</h3><p className="text-xs text-slate-500 leading-5 mt-2">{desc as string}</p></div>)}
+          {featureCards.map(({ icon: Icon, title, desc, border }) => <div key={title} className="gdacs-panel p-5 border-t-4" style={{ borderTopColor: border }}><Icon className="w-7 h-7 text-slate-600 mb-4"/><h3 className="text-sm font-extrabold text-slate-800">{title}</h3><p className="text-xs text-slate-500 leading-5 mt-2">{desc}</p></div>)}
         </section>
 
         <section className="mt-6 gdacs-panel p-5">
