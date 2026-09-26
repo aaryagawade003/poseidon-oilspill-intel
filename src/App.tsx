@@ -29,104 +29,26 @@ export const App: React.FC = () => {
     setTimeOffsetHours(0);
   };
 
-  if (!isAppLaunched) {
-    return <Landing onLaunch={() => setIsAppLaunched(true)} />;
-  }
+  if (!isAppLaunched) return <Landing onLaunch={() => setIsAppLaunched(true)} />;
+
+  const navbarTab = activeTab === 'command' ? 'map' : activeTab;
+  const handleNavbarTab = (tab: 'map' | 'sar' | 'drift' | 'attribution') => setActiveTab(tab);
 
   return (
     <div className="h-screen flex flex-col bg-slate-100 overflow-hidden">
-      <Navbar
-        selectedIncident={selectedIncident}
-        onSelectIncident={handleSelectIncident}
-        onOpenEvidence={() => setIsEvidenceOpen(true)}
-        onOpenArchitecture={() => setIsArchitectureOpen(true)}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-      />
-
+      <Navbar selectedIncident={selectedIncident} onSelectIncident={handleSelectIncident} onOpenEvidence={() => setIsEvidenceOpen(true)} onOpenArchitecture={() => setIsArchitectureOpen(true)} activeTab={navbarTab} setActiveTab={handleNavbarTab} />
       <div className="flex flex-1 overflow-hidden">
-        <Sidebar
-          incident={selectedIncident}
-          selectedVessel={selectedVessel}
-          onSelectVessel={(v) => {
-            setSelectedVessel(v);
-            setActiveTab('attribution');
-          }}
-          onViewEvidence={() => setIsEvidenceOpen(true)}
-        />
-
+        <Sidebar incident={selectedIncident} selectedVessel={selectedVessel} onSelectVessel={(v) => { setSelectedVessel(v); setActiveTab('attribution'); }} onViewEvidence={() => setIsEvidenceOpen(true)} />
         <main className="flex-1 overflow-hidden flex flex-col">
-          {activeTab === 'command' && (
-            <div className="flex-1 overflow-auto p-6">
-              <CommandCenter
-                incident={selectedIncident}
-                onOpenEvidence={() => setIsEvidenceOpen(true)}
-                onOpenArchitecture={() => setIsArchitectureOpen(true)}
-              />
-            </div>
-          )}
-
-          {activeTab === 'map' && (
-            <div className="flex-1 flex flex-col overflow-hidden">
-              <MapView
-                incident={selectedIncident}
-                selectedVessel={selectedVessel}
-                onSelectVessel={(v) => {
-                  setSelectedVessel(v);
-                  setShowCounterfactual(true);
-                }}
-                showCounterfactual={showCounterfactual}
-                timeOffsetHours={timeOffsetHours}
-              />
-              <div className="bg-white border-t border-slate-200 shadow-sm">
-                <TimelineReplay
-                  incident={selectedIncident}
-                  timeOffsetHours={timeOffsetHours}
-                  setTimeOffsetHours={setTimeOffsetHours}
-                />
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'sar' && (
-            <div className="flex-1 overflow-auto p-6">
-              <SARInspection incident={selectedIncident} />
-            </div>
-          )}
-
-          {activeTab === 'drift' && (
-            <div className="flex-1 overflow-auto p-6">
-              <DriftEngine
-                incident={selectedIncident}
-                onRunSimulation={() => setActiveTab('map')}
-              />
-            </div>
-          )}
-
-          {activeTab === 'attribution' && (
-            <div className="flex-1 overflow-auto p-6">
-              <Attribution
-                incident={selectedIncident}
-                selectedVessel={selectedVessel}
-                onSelectVessel={setSelectedVessel}
-                showCounterfactual={showCounterfactual}
-                setShowCounterfactual={setShowCounterfactual}
-                onOpenEvidence={() => setIsEvidenceOpen(true)}
-              />
-            </div>
-          )}
+          {activeTab === 'command' && <div className="flex-1 overflow-auto p-6"><CommandCenter incident={selectedIncident} onOpenEvidence={() => setIsEvidenceOpen(true)} onOpenArchitecture={() => setIsArchitectureOpen(true)} /></div>}
+          {activeTab === 'map' && <div className="flex-1 flex flex-col overflow-hidden"><MapView incident={selectedIncident} selectedVessel={selectedVessel} onSelectVessel={(v) => { setSelectedVessel(v); setShowCounterfactual(true); }} showCounterfactual={showCounterfactual} timeOffsetHours={timeOffsetHours} /><div className="bg-white border-t border-slate-200 shadow-sm"><TimelineReplay incident={selectedIncident} timeOffsetHours={timeOffsetHours} setTimeOffsetHours={setTimeOffsetHours} /></div></div>}
+          {activeTab === 'sar' && <div className="flex-1 overflow-auto p-6"><SARInspection incident={selectedIncident} /></div>}
+          {activeTab === 'drift' && <div className="flex-1 overflow-auto p-6"><DriftEngine incident={selectedIncident} onRunSimulation={() => setActiveTab('map')} /></div>}
+          {activeTab === 'attribution' && <div className="flex-1 overflow-auto p-6"><Attribution incident={selectedIncident} selectedVessel={selectedVessel} onSelectVessel={setSelectedVessel} showCounterfactual={showCounterfactual} setShowCounterfactual={setShowCounterfactual} onOpenEvidence={() => setIsEvidenceOpen(true)} /></div>}
         </main>
       </div>
-
-      <EvidenceModal
-        incident={selectedIncident}
-        isOpen={isEvidenceOpen}
-        onClose={() => setIsEvidenceOpen(false)}
-      />
-      <ArchitectureModal
-        isOpen={isArchitectureOpen}
-        onClose={() => setIsArchitectureOpen(false)}
-      />
+      <EvidenceModal incident={selectedIncident} isOpen={isEvidenceOpen} onClose={() => setIsEvidenceOpen(false)} />
+      <ArchitectureModal isOpen={isArchitectureOpen} onClose={() => setIsArchitectureOpen(false)} />
     </div>
   );
 };
